@@ -1,12 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Post } from '../posts-data/posts-data.component';
+import { PostService } from '../post-service/post.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-posts-read',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './posts-read.component.html',
-  styleUrl: './posts-read.component.scss'
+  styleUrl: './posts-read.component.scss',
 })
-export class PostsReadComponent {
+export class PostsReadComponent implements OnInit {
+  postList: Post[] = [];
 
+  postService: PostService = inject(PostService);
+
+  ngOnInit(): void {
+    this.postService.getPosts().subscribe((posts) => {
+      this.postList = posts;
+    });
+  }
 }
