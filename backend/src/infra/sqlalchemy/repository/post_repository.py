@@ -24,6 +24,7 @@ class PostRepository:
             title=post.title,
             subject=post.subject,
             content=post.content,
+            summary=post.summary,
             date=post.date,
         )
 

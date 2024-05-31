@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Post } from '../posts-data/posts-data.component';
-import { PostService } from '../post-service/post.service';
+import { PostService } from '../../../core/service/post-service/post.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { Post } from 'src/app/core/models/post';
 
 @Component({
   selector: 'app-posts-read',
@@ -17,7 +17,7 @@ export class PostsReadComponent implements OnInit {
   postService: PostService = inject(PostService);
 
   ngOnInit(): void {
-    this.postService.getPosts().subscribe((posts) => {
+    this.postService.getAll().subscribe((posts) => {
       this.postList = posts;
     });
   }
