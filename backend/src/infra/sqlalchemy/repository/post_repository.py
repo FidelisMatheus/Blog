@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 from src.schemas import schemas
 from src.infra.sqlalchemy.models import models
@@ -33,3 +33,17 @@ class PostRepository:
         self.session.refresh(db_post)
 
         return db_post
+
+    def editPost(self, id: int, post: schemas.Post):
+        update_stmt = (
+            update(models.Post)
+            .where(models.Post.id == id)
+            .values(
+                author=post.author,
+                title=post.title,
+                content=post.content,
+                subject=post.subject,
+                summary=post.summary,
+                date=post.date,
+            )
+        )

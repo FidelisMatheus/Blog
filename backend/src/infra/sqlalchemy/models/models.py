@@ -12,5 +12,5 @@ class Post(Base):
     content = Column(String)
     subject = Column(String)
     summary = Column(String)
-    date = Column(String)
+    date = Column(DateTime)
     # date = Column(DateTime(timezone=True), server_default=func.now())
