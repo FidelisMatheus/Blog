@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Angular",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/frontend",
+      "preLaunchTask": "Start Angular"
+    },
+    {
+      "name": "Launch FastAPI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "program": "${workspaceFolder}/backend/src/server.py",
+      "args": [ "src.server:app", "--reload", "--reload-dir=${workspaceFolder}/backend/src"],
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "jinja": true,
+      "cwd": "${workspaceFolder}/backend",
+      "preLaunchTask": "Start FastAPI"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Launch Both",
+      "configurations": ["Launch Angular", "Launch FastAPI"]
+    }
+  ]
+}

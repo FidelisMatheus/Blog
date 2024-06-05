@@ -7,8 +7,10 @@ import {
   Validators,
 } from '@angular/forms'; // Importar o FormsModule
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { Post } from 'src/app/core/models/post';
+import { PostService } from 'src/app/core/service/post-service/post.service';
 
 @Component({
   selector: 'app-posts-data',
@@ -28,8 +30,14 @@ export class PostsDataComponent implements OnInit {
   });
 
   submitted = false;
+  title!: string;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private postService: PostService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -40,6 +48,17 @@ export class PostsDataComponent implements OnInit {
       summary: ['', Validators.required],
       theme: ['', Validators.required],
     });
+
+    if (this.route.snapshot.paramMap.get('id')) {
+      this.title = 'Editar Post';
+
+      const id = this.route.snapshot.paramMap.get('id');
+      // this.customerService.readById(id!).subscribe((customer) => {
+      //   this.customer = customer;
+      // });
+    } else {
+      this.title = 'Novo Post';
+    }
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -51,11 +70,13 @@ export class PostsDataComponent implements OnInit {
 
     const formValues = this.form.value;
 
+    debugger;
+
     const newPost: Post = {
       title: formValues.title!,
       content: formValues.content!,
       date: formValues.date!,
-      theme: formValues.theme!,
+      subject: formValues.theme!,
       summary: formValues.summary!,
       author: formValues.author!,
     };
@@ -64,6 +85,10 @@ export class PostsDataComponent implements OnInit {
       return;
     }
 
+    this.postService.create(newPost).subscribe(() => {
+      this.router.navigate(['/posts']);
+    });
+
     console.log(JSON.stringify(this.form.value, null, 2));
   }
 
@@ -71,13 +96,4 @@ export class PostsDataComponent implements OnInit {
     this.submitted = false;
     this.form.reset();
   }
-}
-
-export interface Post {
-  title: string;
-  content: string;
-  date: string;
-  theme: string;
-  summary: string;
-  author: string;
 }

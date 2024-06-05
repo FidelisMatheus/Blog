@@ -2,4 +2,19 @@
   <h3>Lista de Posts</h3>
 
   <a href="/posts/data" class="btn btn-primary"> Add Post</a>
+
+  <section>
+    @for(post of postList; track post; let i = $index) {
+    <mat-card class="mt-4 mb-4 p-2">
+      <strong
+        ><mat-card-header class="text-center">
+          {{ post.title }}</mat-card-header
+        ></strong
+      >
+      <mat-card-content>{{ post.content }}</mat-card-content>
+      <mat-card-footer class="text-end"> {{ post.author }}</mat-card-footer>
+    </mat-card>
+
+    }
+  </section>
 </div>
