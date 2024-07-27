@@ -6,16 +6,16 @@ import { RouterModule } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PostService } from '../../../core/service/post-service/post.service';
-import { Post } from './../../../core/models/post';
+import { Post } from '../../../core/models/post';
 
 @Component({
-  selector: 'app-posts-read',
+  selector: 'app-posts-list',
   standalone: true,
   imports: [CommonModule, MatCardModule, MatIconModule, RouterModule],
-  templateUrl: './posts-read.component.html',
-  styleUrl: './posts-read.component.scss',
+  templateUrl: './posts-list.component.html',
+  styleUrl: './posts-list.component.scss',
 })
-export class PostsReadComponent implements OnInit {
+export class PostsListComponent implements OnInit {
   postList: Post[] = [];
 
   postService: PostService = inject(PostService);

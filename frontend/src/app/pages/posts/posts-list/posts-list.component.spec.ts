@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PostsReadComponent } from './posts-read.component';
+import { PostsListComponent } from './posts-list.component';
 
 describe('PostsReadComponent', () => {
-  let component: PostsReadComponent;
-  let fixture: ComponentFixture<PostsReadComponent>;
+  let component: PostsListComponent;
+  let fixture: ComponentFixture<PostsListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PostsReadComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(PostsReadComponent);
+      imports: [PostsListComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(PostsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

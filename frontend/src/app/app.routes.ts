@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { PostsDataComponent } from './pages/posts/posts-data/posts-data.component';
-import { PostsReadComponent } from './pages/posts/posts-read/posts-read.component';
+import { PostsListComponent } from './pages/posts/posts-list/posts-list.component';
 
 export const routes: Routes = [
   {
@@ -11,7 +11,7 @@ export const routes: Routes = [
   },
   {
     path: 'posts',
-    component: PostsReadComponent,
+    component: PostsListComponent,
     title: 'Add Posts',
   },
   {
