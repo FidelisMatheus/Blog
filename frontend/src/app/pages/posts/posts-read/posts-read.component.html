@@ -1,0 +1,12 @@
+<div class="container">
+  <h3>Read post</h3>
+
+  @if(post != undefined) {
+  <h5>Autor: {{ post.author }}</h5>
+  <p>Dia postado: {{ post.date }}</p>
+  <p>Assunto: {{ post.subject }}</p>
+  <p>Titulo do Post: {{ post.title }}</p>
+
+  <div id="content" [innerHTML]="content"></div>
+  }
+</div>
