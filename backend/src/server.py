@@ -13,6 +13,7 @@ check_and_create_db()
 origins = [
     "http://localhost:3000",
     "http://localhost:4200",
+    "http://localhost:3307",
 ]
 
 app.add_middleware(

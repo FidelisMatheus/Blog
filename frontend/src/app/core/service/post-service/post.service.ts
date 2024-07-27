@@ -31,6 +31,22 @@ export class PostService {
     );
   }
 
+  update(id: any, post: Post): Observable<Post> {
+    const url = `${environment.POST_BY_ID_URL}/${id}`;
+    return this.http.put<Post>(url, post).pipe(
+      map((obj) => obj),
+      catchError((e) => this.errorHandler(e))
+    );
+  }
+
+  delete(id: any): Observable<Post> {
+    const url = `${environment.POST_BY_ID_URL}/${id}`;
+    return this.http.delete<Post>(url).pipe(
+      map((obj) => obj),
+      catchError((e) => this.errorHandler(e))
+    );
+  }
+
   errorHandler(e: any): Observable<any> {
     console.log(e);
     return EMPTY;

@@ -1,13 +1,17 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { PostService } from '../../../core/service/post-service/post.service';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { Post } from 'src/app/core/models/post';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+
+import { PostService } from '../../../core/service/post-service/post.service';
+import { Post } from './../../../core/models/post';
 
 @Component({
   selector: 'app-posts-read',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, RouterModule],
   templateUrl: './posts-read.component.html',
   styleUrl: './posts-read.component.scss',
 })
