@@ -5,6 +5,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormsModule,
 } from '@angular/forms'; // Importar o FormsModule
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,11 +13,47 @@ import { NgClass } from '@angular/common';
 import { Post } from 'src/app/core/models/post';
 import { PostService } from 'src/app/core/service/post-service/post.service';
 import { MatCardModule } from '@angular/material/card';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+import {
+  EditorChangeContent,
+  EditorChangeSelection,
+  QuillModule,
+} from 'ngx-quill'; // https://www.youtube.com/watch?v=f1qQOorMKGo
+
+export const editorModules = {
+  toolbar: [
+    ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+    ['blockquote', 'code-block'],
+    ['link', 'image', 'video', 'formula'],
+
+    [{ header: 1 }, { header: 2 }], // custom button values
+    [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+    [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+    [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+    [{ direction: 'rtl' }], // text direction
+
+    [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ font: [] }],
+    [{ align: [] }],
+
+    ['clean'], // remove formatting button
+  ],
+};
 
 @Component({
   selector: 'app-posts-data',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, MatCardModule],
+  imports: [
+    ReactiveFormsModule,
+    NgClass,
+    MatCardModule,
+    FormsModule,
+    QuillModule,
+  ],
   templateUrl: './posts-data.component.html',
   styleUrl: './posts-data.component.scss',
 })
@@ -32,13 +69,42 @@ export class PostsDataComponent implements OnInit {
 
   submitted = false;
   title!: string;
+  safeHtml: SafeHtml | undefined;
+  sanitize: any;
+  editorText = '';
+  editorModules = editorModules;
+  formats = [
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'code-block',
+    'link',
+    'image',
+    'video',
+    'formula',
+    'header',
+    'list',
+    'script',
+    'indent',
+    'direction',
+    'size',
+    'color',
+    'background',
+    'font',
+    'align',
+  ];
 
   constructor(
     private postService: PostService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer
+  ) {
+    this.sanitize = sanitizer;
+  }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -136,5 +202,29 @@ export class PostsDataComponent implements OnInit {
     const time = `${hours}:${minutes}:${seconds}`;
 
     return `${date} ${time}`;
+  }
+
+  changedEditor(event: EditorChangeContent | EditorChangeSelection) {
+    let contentHTML = event['editor']['root']['innerHTML'];
+    contentHTML = this.adjustImages(contentHTML);
+
+    // console.log(' editor got changed ', event);
+    contentHTML = this.sanitize.bypassSecurityTrustHtml(contentHTML);
+    this.editorText = contentHTML;
+  }
+
+  adjustImages(html: string): string {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+
+    const images = div.querySelectorAll('img');
+    images.forEach((img) => {
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      img.style.display = 'block';
+      img.style.margin = '0 auto';
+    });
+
+    return div.innerHTML;
   }
 }

@@ -25,3 +25,17 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+### Install Quill Editor
+
+Need add in app.config.ts this code:
+
+- importProvidersFrom(QuillModule.forRoot()),
+
+And in angular.json it's necessary add new CSS and JS references
+
+- "./node_modules/quill/dist/quill.core.css",
+- "./node_modules/quill/dist/quill.snow.css",
+- "./node_modules/quill/dist/quill.core.js"
+
+Only this

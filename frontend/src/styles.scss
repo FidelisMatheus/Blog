@@ -19,6 +19,14 @@
 @import "../node_modules/bootstrap/scss/popover";
 @import "../node_modules/bootstrap/scss/offcanvas"; // Requires transitions
 @import "../node_modules/bootstrap/scss/utilities/api";
+@import "../node_modules/quill/dist/quill.core.css";
+@import "../node_modules/quill/dist/quill.snow.css";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

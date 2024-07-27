@@ -26,7 +26,7 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("author", sa.String(255), nullable=True),
         sa.Column("title", sa.String(255), nullable=True),
-        sa.Column("content", sa.String(255), nullable=True),
+        sa.Column("content", sa.UnicodeText(), nullable=True),
         sa.Column("subject", sa.String(255), nullable=True),
         sa.Column("summary", sa.String(255), nullable=True),
         sa.Column("date", sa.DateTime(), nullable=True),
