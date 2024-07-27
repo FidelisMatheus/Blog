@@ -24,7 +24,6 @@ export class PostService {
   }
 
   create(post: Post): Observable<Post> {
-    debugger;
     return this.http.post<Post>(environment.POST_URL, post).pipe(
       map((obj) => obj),
       catchError((e) => this.errorHandler(e))

@@ -213,6 +213,7 @@ export class PostsDataComponent implements OnInit {
     this.editorText = contentHTML;
   }
 
+  // TODO necessita ajustar as imagens ainda
   adjustImages(html: string): string {
     const div = document.createElement('div');
     div.innerHTML = html;
