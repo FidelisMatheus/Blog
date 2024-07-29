@@ -206,26 +206,10 @@ export class PostsDataComponent implements OnInit {
 
   changedEditor(event: EditorChangeContent | EditorChangeSelection) {
     let contentHTML = event['editor']['root']['innerHTML'];
-    contentHTML = this.adjustImages(contentHTML);
+    //contentHTML = this.adjustImages(contentHTML);
 
     // console.log(' editor got changed ', event);
     contentHTML = this.sanitize.bypassSecurityTrustHtml(contentHTML);
     this.editorText = contentHTML;
-  }
-
-  // TODO necessita ajustar as imagens ainda
-  adjustImages(html: string): string {
-    const div = document.createElement('div');
-    div.innerHTML = html;
-
-    const images = div.querySelectorAll('img');
-    images.forEach((img) => {
-      img.style.maxWidth = '100%';
-      img.style.height = 'auto';
-      img.style.display = 'block';
-      img.style.margin = '0 auto';
-    });
-
-    return div.innerHTML;
   }
 }

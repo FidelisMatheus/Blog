@@ -82,9 +82,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="exampleFormControlTextarea1" class="form-label"
-        >Texto Conteudo</label
-      >
+      <label for="editor" class="form-label">Texto Conteudo</label>
 
       <div class="d-flex flex-row">
         <div class="row col-md-6 me-2">
@@ -93,7 +91,7 @@
             [modules]="editorModules"
             [formats]="formats"
             (onEditorChanged)="changedEditor($event)"
-            id="exampleFormControlTextarea1"
+            id="editor"
             rows="3"
             formControlName="content"
           ></quill-editor>
