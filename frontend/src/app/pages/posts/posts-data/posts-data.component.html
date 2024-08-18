@@ -86,7 +86,7 @@
 
       <div class="d-flex flex-row">
         <div class="row col-md-6 me-2">
-          <quill-editor
+          <!-- <quill-editor
             [styles]="{ height: 'auto' }"
             [modules]="editorModules"
             [formats]="formats"
@@ -94,7 +94,13 @@
             id="editor"
             rows="3"
             formControlName="content"
-          ></quill-editor>
+          ></quill-editor> -->
+
+          <editor
+            [init]="init"
+            apiKey="0japvssb2ukf0tiyzgk62132suj3cf44hxxcdmgdyx7xl9dg"
+            formControlName="content"
+          />
         </div>
 
         <div class="row col-md-6">

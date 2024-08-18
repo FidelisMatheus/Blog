@@ -15,6 +15,8 @@ import { PostService } from 'src/app/core/service/post-service/post.service';
 import { MatCardModule } from '@angular/material/card';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+import { EditorComponent } from '@tinymce/tinymce-angular';
+
 import {
   EditorChangeContent,
   EditorChangeSelection,
@@ -53,6 +55,7 @@ export const editorModules = {
     MatCardModule,
     FormsModule,
     QuillModule,
+    EditorComponent,
   ],
   templateUrl: './posts-data.component.html',
   styleUrl: './posts-data.component.scss',
@@ -66,6 +69,12 @@ export class PostsDataComponent implements OnInit {
     summary: new FormControl(''),
     date: new FormControl(''),
   });
+
+  init: EditorComponent['init'] = {
+    plugins: 'lists link image table code help wordcount',
+  };
+
+  api = import.meta.env.NG_APP_TINYMCE_API_KEY;
 
   submitted = false;
   title!: string;
@@ -107,6 +116,8 @@ export class PostsDataComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.api);
+
     this.form = this.formBuilder.group({
       author: ['', Validators.required],
       title: ['', Validators.required],
