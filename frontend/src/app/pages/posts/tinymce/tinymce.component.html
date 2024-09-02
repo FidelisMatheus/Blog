@@ -85,22 +85,31 @@
       <label for="editor" class="form-label">Texto Conteudo</label>
 
       <div class="d-flex flex-row">
-        <div class="row col-md-12 me-2">
-          <textarea
-            hidden
+        <div class="row col-md-6 me-2">
+          <!-- <quill-editor
+            [styles]="{ height: 'auto' }"
+            [modules]="editorModules"
+            [formats]="formats"
+            (onEditorChanged)="changedEditor($event)"
+            id="editor"
+            rows="3"
             formControlName="content"
-            placeholder="Content"
-          ></textarea>
+          ></quill-editor> -->
 
-          <textarea
-            hidden
-            formControlName="css"
-            placeholder="Content"
-          ></textarea>
+          <editor
+            [init]="init"
+            apiKey="0japvssb2ukf0tiyzgk62132suj3cf44hxxcdmgdyx7xl9dg"
+            formControlName="content"
+          />
+        </div>
 
-          <app-web-builder
-            (editorReady)="onEditorReady($event)"
-          ></app-web-builder>
+        <div class="row col-md-6">
+          <div class="bg-light">
+            <p
+              [innerHTML]="editorText"
+              style="max-width: 100%; height: auto"
+            ></p>
+          </div>
         </div>
       </div>
     </div>

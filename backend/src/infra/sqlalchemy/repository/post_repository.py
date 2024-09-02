@@ -24,6 +24,7 @@ class PostRepository:
             title=post.title,
             subject=post.subject,
             content=post.content,
+            css=post.css,
             summary=post.summary,
             date=post.date,
         )
@@ -42,6 +43,7 @@ class PostRepository:
                 author=post.author,
                 title=post.title,
                 content=post.content,
+                css=post.css,
                 subject=post.subject,
                 summary=post.summary,
                 date=post.date,

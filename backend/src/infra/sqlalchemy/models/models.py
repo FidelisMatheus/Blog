@@ -10,6 +10,7 @@ class Post(Base):
     author = Column(String)
     title = Column(String)
     content = Column(Text)
+    css = Column(Text)
     subject = Column(String)
     summary = Column(String)
     date = Column(DateTime)
