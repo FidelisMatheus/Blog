@@ -1,0 +1,131 @@
+<h2>{{ title }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="container card mt-3">
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Dia Postagem / Atualização / Agendamento</label
+      >
+      <input
+        type="date"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="date"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Autor / Pessoa logada</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="author"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="title"
+        [ngClass]="{ 'is-invalid': submitted && f['title'].errors }"
+      />
+      @if (submitted && f['title'].errors) {
+      <div class="invalid-feedback">
+        @if (f['title'].errors['required']) {
+        <div>title is required</div>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Assunto / Tema</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="subject"
+        [ngClass]="{ 'is-invalid': submitted && f['subject'].errors }"
+      />
+      @if (submitted && f['subject'].errors) {
+      <div class="invalid-feedback">
+        @if (f['subject'].errors['required']) {
+        <div>O assunto é obrigatório</div>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Summary / Resumo</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="summary"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="editor" class="form-label">Texto Conteudo</label>
+
+      <div class="d-flex flex-row">
+        <div class="row col-md-6 me-2">
+          <!-- <quill-editor
+            [styles]="{ height: 'auto' }"
+            [modules]="editorModules"
+            [formats]="formats"
+            (onEditorChanged)="changedEditor($event)"
+            id="editor"
+            rows="3"
+            formControlName="content"
+          ></quill-editor> -->
+
+          <editor
+            [init]="init"
+            apiKey="0japvssb2ukf0tiyzgk62132suj3cf44hxxcdmgdyx7xl9dg"
+            formControlName="content"
+          />
+        </div>
+
+        <div class="row col-md-6">
+          <div class="bg-light">
+            <p
+              [innerHTML]="editorText"
+              style="max-width: 100%; height: auto"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary">Register</button>
+
+        <button
+          type="button"
+          (click)="onReset()"
+          class="btn btn-warning float-right"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

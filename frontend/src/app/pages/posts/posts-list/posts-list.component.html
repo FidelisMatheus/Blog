@@ -1,0 +1,50 @@
+<div class="container">
+  <h3>Lista de Posts</h3>
+
+  <button routerLink="/posts/data" class="btn btn-primary">Add Post</button>
+
+  <section>
+    @for(post of postList; track post; let i = $index) {
+    <mat-card class="mt-4 mb-4 p-2">
+      <div class="d-flex flex-row justify-content-between col-12">
+        <div class="fs-6 col-4">Título: {{ post.title }}</div>
+
+        <div class="col-6 text-end">
+          <button
+            aria-label="Example icon button with a plus one icon"
+            routerLink="/posts/data/{{ post.id }}"
+            class="btn btn-primary btn-sm"
+          >
+            <mat-icon class="icon-action">edit</mat-icon>
+          </button>
+
+          <button
+            aria-label="Example icon button with a plus one icon"
+            class="btn btn-danger btn-sm ms-2"
+            (click)="deletePost(post.id)"
+          >
+            <mat-icon class="icon-action">delete</mat-icon>
+          </button>
+
+          <button
+            aria-label="Example icon button with a plus one icon"
+            class="btn btn-warning btn-sm ms-2"
+            routerLink="/posts/read/{{ post.id }}"
+          >
+            <mat-icon class="icon-action">visibility</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="">
+        <div></div>
+      </div>
+      <!-- <mat-card-content>{{ post.content }}</mat-card-content> -->
+
+      <mat-card-footer class="text-start">
+        Autor: {{ post.author }}</mat-card-footer
+      >
+    </mat-card>
+
+    }
+  </section>
+</div>

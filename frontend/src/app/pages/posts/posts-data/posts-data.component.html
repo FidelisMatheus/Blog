@@ -1,0 +1,120 @@
+<h2>{{ title }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="container card mt-3">
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Dia Postagem / Atualização / Agendamento</label
+      >
+      <input
+        type="date"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="date"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Autor / Pessoa logada</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="author"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label">Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="title"
+        [ngClass]="{ 'is-invalid': submitted && f['title'].errors }"
+      />
+      @if (submitted && f['title'].errors) {
+      <div class="invalid-feedback">
+        @if (f['title'].errors['required']) {
+        <div>title is required</div>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Assunto / Tema</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="subject"
+        [ngClass]="{ 'is-invalid': submitted && f['subject'].errors }"
+      />
+      @if (submitted && f['subject'].errors) {
+      <div class="invalid-feedback">
+        @if (f['subject'].errors['required']) {
+        <div>O assunto é obrigatório</div>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Summary / Resumo</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+        formControlName="summary"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="editor" class="form-label">Texto Conteudo</label>
+
+      <div class="d-flex flex-row">
+        <div class="row col-md-12 me-2">
+          <textarea
+            hidden
+            formControlName="content"
+            placeholder="Content"
+          ></textarea>
+
+          <textarea
+            hidden
+            formControlName="css"
+            placeholder="Content"
+          ></textarea>
+
+          <app-web-builder></app-web-builder>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary">Register</button>
+
+        <button
+          type="button"
+          (click)="onReset()"
+          class="btn btn-warning float-right"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+</form>
