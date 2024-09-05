@@ -7,7 +7,7 @@ import {
   Validators,
   FormsModule,
 } from '@angular/forms'; // Importar o FormsModule
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { Post } from 'src/app/core/models/post';
@@ -32,7 +32,9 @@ import { GrapesJsService } from 'src/app/core/service/grapes-js/grapes-js.servic
   templateUrl: './posts-data.component.html',
   styleUrl: './posts-data.component.scss',
 })
-export class PostsDataComponent implements OnInit {
+export class PostsDataComponent implements AfterViewInit, OnInit {
+  @ViewChild(WebBuilderComponent) grapesJsComponent!: WebBuilderComponent;
+
   form = new FormGroup({
     author: new FormControl(''),
     title: new FormControl(''),
@@ -86,6 +88,8 @@ export class PostsDataComponent implements OnInit {
           summary: post.summary,
           date: this.formatDate(post.date),
         });
+
+        this.updateGrapesContent(this.form.value.content, this.form.value.css);
       });
     } else {
       this.title = 'Novo Post';
@@ -94,13 +98,15 @@ export class PostsDataComponent implements OnInit {
     this.isLoading = true;
   }
 
-  onEditorReady(respostaFilho: any) {
-    console.log('setei no builder');
-    const editor = this.grapesjsService.getGrapesInstance();
-    editor.setComponents(this.form.value.content);
-    editor.setStyle(this.form.value.css);
+  ngAfterViewInit() {
+    if (this.route.snapshot.paramMap.get('id')) {
+      this.updateGrapesContent(this.form.value.content, this.form.value.css);
+    }
+  }
 
-    this.isLoading = false;
+  updateGrapesContent(html: any, css: any) {
+    // Manda o HTML e o CSS para o GrapesJS depois de tudo carregado
+    this.grapesJsComponent.setContent(html, css);
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -108,16 +114,16 @@ export class PostsDataComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const editor = this.grapesjsService.getGrapesInstance();
-    if (editor) {
-      // Faça algo com a instância do GrapesJS
-      console.log(editor.getHtml()); // Exemplo de uso
-    }
-
     this.submitted = !this.submitted;
 
     if (this.form.invalid) {
       return;
+    }
+
+    const editor = this.grapesjsService.getGrapesInstance();
+    if (editor) {
+      // Faça algo com a instância do GrapesJS
+      // console.log(editor.getHtml()); // Exemplo de uso
     }
 
     const formValues = this.form.value;

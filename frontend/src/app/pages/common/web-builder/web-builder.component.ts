@@ -1,19 +1,10 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-  PLATFORM_ID,
-  Input,
-  Output,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import grapesjs from 'grapesjs';
 import newsletterPlugin from 'grapesjs-preset-newsletter';
 import webpagePlugin from 'grapesjs-preset-webpage';
 
 import { isPlatformBrowser } from '@angular/common';
 import { GrapesJsService } from 'src/app/core/service/grapes-js/grapes-js.service';
-import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-web-builder',
@@ -22,9 +13,7 @@ import { EventEmitter } from '@angular/core';
   templateUrl: './web-builder.component.html',
   styleUrl: './web-builder.component.scss',
 })
-export class WebBuilderComponent implements AfterViewInit, OnInit {
-  @Output() editorReady = new EventEmitter();
-
+export class WebBuilderComponent implements OnInit {
   public editor: any = null;
 
   constructor(
@@ -79,13 +68,7 @@ export class WebBuilderComponent implements AfterViewInit, OnInit {
       });
 
       this.addCustomBlocks();
-
-      this.grapesjsService.setGrapesInstance(this.editor);
     }
-  }
-
-  ngAfterViewInit() {
-    this.test();
   }
 
   ngOnDestroy() {
@@ -93,19 +76,14 @@ export class WebBuilderComponent implements AfterViewInit, OnInit {
     this.grapesjsService.setGrapesInstance(null);
   }
 
-  protected test() {
-    const checkEditorReady = setInterval(() => {
-      if (this.editor && this.editor.getComponents) {
-        clearInterval(checkEditorReady);
-        console.log('passei no builder');
+  setContent(html: string, css: string) {
+    if (this.editor) {
+      this.editor.setComponents(html);
 
-        // Configuração do editor
-        // editor.setComponents(this.form.value.content);
+      this.editor.setStyle(css);
 
-        // Emite o evento quando o editor está pronto
-        this.editorReady.emit('ok');
-      }
-    }, 100); // Verifica a cada 100 milissegundos
+      this.grapesjsService.setGrapesInstance(this.editor);
+    }
   }
 
   private addCustomBlocks(): void {

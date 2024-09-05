@@ -1,9 +1,10 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from 'src/app/core/models/post';
 import { PostService } from 'src/app/core/service/post-service/post.service';
 
+import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-posts-read',
   standalone: true,
@@ -17,6 +18,7 @@ export class PostsReadComponent {
   css: any = '';
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private postService: PostService,
     private router: Router,
     private route: ActivatedRoute,
@@ -25,16 +27,18 @@ export class PostsReadComponent {
   ) {}
 
   ngOnInit(): void {
-    if (this.route.snapshot.paramMap.get('id')) {
-      const id = this.route.snapshot.paramMap.get('id');
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.route.snapshot.paramMap.get('id')) {
+        const id = this.route.snapshot.paramMap.get('id');
 
-      this.postService.getById(id!).subscribe((post) => {
-        this.post = post;
-        this.content = this.sanitizer.bypassSecurityTrustHtml(post.content);
-        this.css = this.sanitizer.bypassSecurityTrustHtml(post.css);
-      });
+        this.postService.getById(id!).subscribe((post) => {
+          this.post = post;
+          this.content = this.sanitizer.bypassSecurityTrustHtml(post.content);
+          this.css = this.sanitizer.bypassSecurityTrustHtml(post.css);
 
-      this.injectCSS(this.css);
+          this.injectCSS(this.css);
+        });
+      }
     }
   }
 

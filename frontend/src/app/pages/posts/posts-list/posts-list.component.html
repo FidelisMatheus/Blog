@@ -7,9 +7,7 @@
     @for(post of postList; track post; let i = $index) {
     <mat-card class="mt-4 mb-4 p-2">
       <div class="d-flex flex-row justify-content-between col-12">
-        <div class="fs-6 col-4">
-          {{ post.title }}
-        </div>
+        <div class="fs-6 col-4">Título: {{ post.title }}</div>
 
         <div class="col-6 text-end">
           <button
@@ -40,9 +38,11 @@
       <div class="">
         <div></div>
       </div>
-      <mat-card-content>{{ post.content }}</mat-card-content>
+      <!-- <mat-card-content>{{ post.content }}</mat-card-content> -->
 
-      <mat-card-footer class="text-end"> {{ post.author }}</mat-card-footer>
+      <mat-card-footer class="text-start">
+        Autor: {{ post.author }}</mat-card-footer
+      >
     </mat-card>
 
     }
