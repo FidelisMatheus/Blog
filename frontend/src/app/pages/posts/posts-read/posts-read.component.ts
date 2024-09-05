@@ -1,28 +1,50 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Post } from 'src/app/core/models/post';
+import { PostService } from 'src/app/core/service/post-service/post.service';
 
-import { PostService } from '../../../core/service/post-service/post.service';
-import { Post } from './../../../core/models/post';
-
+import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-posts-read',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, RouterModule],
+  imports: [],
   templateUrl: './posts-read.component.html',
   styleUrl: './posts-read.component.scss',
 })
-export class PostsReadComponent implements OnInit {
-  postList: Post[] = [];
+export class PostsReadComponent {
+  post!: Post;
+  content: any = '';
+  css: any = '';
 
-  postService: PostService = inject(PostService);
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private postService: PostService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit(): void {
-    this.postService.getAll().subscribe((posts) => {
-      this.postList = posts;
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.route.snapshot.paramMap.get('id')) {
+        const id = this.route.snapshot.paramMap.get('id');
+
+        this.postService.getById(id!).subscribe((post) => {
+          this.post = post;
+          this.content = this.sanitizer.bypassSecurityTrustHtml(post.content);
+          this.css = this.sanitizer.bypassSecurityTrustHtml(post.css);
+
+          this.injectCSS(this.css);
+        });
+      }
+    }
+  }
+
+  injectCSS(css: string) {
+    const style = this.renderer.createElement('style');
+    style.innerHTML = css;
+    this.renderer.appendChild(document.head, style);
   }
 }

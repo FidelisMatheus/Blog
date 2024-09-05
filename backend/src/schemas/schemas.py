@@ -10,6 +10,7 @@ class Post(BaseModel):
     author: str
     title: str
     content: str
+    css: str
     subject: str
     summary: Optional[str] = None
     date: Optional[datetime] = None

@@ -7,17 +7,44 @@ import {
   Validators,
   FormsModule,
 } from '@angular/forms'; // Importar o FormsModule
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { Post } from 'src/app/core/models/post';
 import { PostService } from 'src/app/core/service/post-service/post.service';
 import { MatCardModule } from '@angular/material/card';
-import { SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { WebBuilderComponent } from '../../common/web-builder/web-builder.component';
+import { EditorComponent } from '@tinymce/tinymce-angular';
 
-import { GrapesJsService } from 'src/app/core/service/grapes-js/grapes-js.service';
+import {
+  EditorChangeContent,
+  EditorChangeSelection,
+  QuillModule,
+} from 'ngx-quill'; // https://www.youtube.com/watch?v=f1qQOorMKGo
+
+export const editorModules = {
+  toolbar: [
+    ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+    ['blockquote', 'code-block'],
+    ['link', 'image', 'video', 'formula'],
+
+    [{ header: 1 }, { header: 2 }], // custom button values
+    [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+    [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+    [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+    [{ direction: 'rtl' }], // text direction
+
+    [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    [{ font: [] }],
+    [{ align: [] }],
+
+    ['clean'], // remove formatting button
+  ],
+};
 
 @Component({
   selector: 'app-posts-data',
@@ -27,47 +54,74 @@ import { GrapesJsService } from 'src/app/core/service/grapes-js/grapes-js.servic
     NgClass,
     MatCardModule,
     FormsModule,
-    WebBuilderComponent,
+    QuillModule,
+    EditorComponent,
   ],
   templateUrl: './posts-data.component.html',
   styleUrl: './posts-data.component.scss',
 })
-export class PostsDataComponent implements AfterViewInit, OnInit {
-  @ViewChild(WebBuilderComponent) grapesJsComponent!: WebBuilderComponent;
-
+export class PostsDataComponent implements OnInit {
   form = new FormGroup({
     author: new FormControl(''),
     title: new FormControl(''),
     content: new FormControl(''),
-    css: new FormControl(''),
     subject: new FormControl(''),
     summary: new FormControl(''),
     date: new FormControl(''),
   });
 
+  init: EditorComponent['init'] = {
+    plugins: 'lists link image table code help wordcount',
+  };
+
   api = import.meta.env.NG_APP_TINYMCE_API_KEY;
-  isLoading = true; // Estado de carregamento
 
   submitted = false;
   title!: string;
   safeHtml: SafeHtml | undefined;
   sanitize: any;
   editorText = '';
+  editorModules = editorModules;
+  formats = [
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'code-block',
+    'link',
+    'image',
+    'video',
+    'formula',
+    'header',
+    'list',
+    'script',
+    'indent',
+    'direction',
+    'size',
+    'color',
+    'background',
+    'font',
+    'align',
+  ];
 
   constructor(
     private postService: PostService,
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private grapesjsService: GrapesJsService
-  ) {}
+    private sanitizer: DomSanitizer
+  ) {
+    this.sanitize = sanitizer;
+  }
 
   ngOnInit(): void {
+    console.log(this.api);
+
     this.form = this.formBuilder.group({
       author: ['', Validators.required],
       title: ['', Validators.required],
-      content: [''],
-      css: [''],
+      content: ['', Validators.required],
       subject: ['', Validators.required],
       summary: ['', Validators.required],
       date: [this.formatDate(new Date()), Validators.required],
@@ -83,30 +137,14 @@ export class PostsDataComponent implements AfterViewInit, OnInit {
           author: post.author,
           title: post.title,
           content: post.content,
-          css: post.css,
           subject: post.subject,
           summary: post.summary,
           date: this.formatDate(post.date),
         });
-
-        this.updateGrapesContent(this.form.value.content, this.form.value.css);
       });
     } else {
       this.title = 'Novo Post';
     }
-
-    this.isLoading = true;
-  }
-
-  ngAfterViewInit() {
-    if (this.route.snapshot.paramMap.get('id')) {
-      this.updateGrapesContent(this.form.value.content, this.form.value.css);
-    }
-  }
-
-  updateGrapesContent(html: any, css: any) {
-    // Manda o HTML e o CSS para o GrapesJS depois de tudo carregado
-    this.grapesJsComponent.setContent(html, css);
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -120,23 +158,13 @@ export class PostsDataComponent implements AfterViewInit, OnInit {
       return;
     }
 
-    const editor = this.grapesjsService.getGrapesInstance();
-    if (editor) {
-      // Faça algo com a instância do GrapesJS
-      // console.log(editor.getHtml()); // Exemplo de uso
-    }
-
     const formValues = this.form.value;
     const dateNow = new Date();
-
-    this.form.value.content = editor.getHtml();
-    this.form.value.css = editor.getCss();
 
     const newPost: Post = {
       author: formValues.author!,
       title: formValues.title!,
       content: formValues.content!,
-      css: formValues.css!,
       subject: formValues.subject!,
       summary: formValues.summary!,
       date: this.parseDate(dateNow),
@@ -185,5 +213,14 @@ export class PostsDataComponent implements AfterViewInit, OnInit {
     const time = `${hours}:${minutes}:${seconds}`;
 
     return `${date} ${time}`;
+  }
+
+  changedEditor(event: EditorChangeContent | EditorChangeSelection) {
+    let contentHTML = event['editor']['root']['innerHTML'];
+    //contentHTML = this.adjustImages(contentHTML);
+
+    // console.log(' editor got changed ', event);
+    contentHTML = this.sanitize.bypassSecurityTrustHtml(contentHTML);
+    this.editorText = contentHTML;
   }
 }
