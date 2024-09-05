@@ -35,3 +35,15 @@ If you want to learn more about creating good readme files then refer the follow
 - [ASP.NET Core](https://github.com/aspnet/Home)
 - [Visual Studio Code](https://github.com/Microsoft/vscode)
 - [Chakra Core](https://github.com/Microsoft/ChakraCore)
+
+### Install .env by command prompt:
+
+- `python -m venv nome_do_ambiente`
+
+ex: `python -m venv venv`
+
+Active the new environment
+`nome_do_ambiente\Scripts\activate`
+
+Install packages
+`pip install -r imported.txt`
